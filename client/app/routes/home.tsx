@@ -1,13 +1,13 @@
 import type { Route } from "./+types/home";
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "KitaabKosh" },
+    { name: "description", content: "Book Management Platform" },
   ];
 }
 
 export default function Home() {
-  return <Button type="button">Button</Button>;
+  return <Button className="text-lg font-medium">Button</Button>;
 }
