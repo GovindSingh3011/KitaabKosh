@@ -1,7 +1,5 @@
 import express from "express";
-import { toNodeHandler } from "better-auth/node";
 import cors from "cors";
-import { auth } from "../lib/auth";
 
 const app = express();
 const PORT = 3000;
@@ -15,7 +13,6 @@ app.use(
   }),
 );
 
-app.all("/api/auth/*", toNodeHandler(auth));
 app.use(express.json());
 
 app.listen(PORT, () => {
