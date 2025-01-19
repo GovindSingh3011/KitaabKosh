@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "./ui/button";
+import { toast } from "sonner";
 import {
   Form,
   FormControl,
@@ -12,6 +13,7 @@ import {
   FormMessage,
 } from "./ui/form";
 import { Input } from "./ui/input";
+import { useNavigate } from "react-router";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -20,7 +22,9 @@ const formSchema = z.object({
 });
 
 export default function SignUpForm() {
+  const navigate = useNavigate();
   const [isSignUp, setIsSignUp] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -32,8 +36,35 @@ export default function SignUpForm() {
   });
 
   const onSubmit = async (data) => {
-    // Handle form submission
-    console.log(data);
+    try {
+      setIsLoading(true);
+      const endpoint = isSignUp ? "/api/auth/signup" : "/api/auth/signin";
+      const response = await fetch(`http://localhost:3000${endpoint}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Something went wrong");
+      }
+
+      localStorage.setItem("token", result.token);
+
+      localStorage.setItem("user", JSON.stringify(result.user));
+
+      toast.success("Signed in successfully");
+
+      navigate("/dashboard");
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -96,8 +127,8 @@ export default function SignUpForm() {
               )}
             />
 
-            <Button type="submit" className="w-full">
-              {isSignUp ? "Sign Up" : "Sign In"}
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? "Loading..." : isSignUp ? "Sign Up" : "Sign In"}
             </Button>
           </form>
         </Form>

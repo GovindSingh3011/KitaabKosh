@@ -3,6 +3,7 @@ import "./app.css";
 import { BrowserRouter, Routes, Route } from "react-router";
 import Home from "./routes/home.jsx";
 import Dashboard from "./routes/dashboard.jsx";
+import { Toaster } from "./components/ui/sonner";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -10,5 +11,6 @@ createRoot(document.getElementById("root")).render(
       <Route path="/" element={<Home />} />
       <Route path="/dashboard" element={<Dashboard />} />
     </Routes>
+    <Toaster richColors />
   </BrowserRouter>,
 );
