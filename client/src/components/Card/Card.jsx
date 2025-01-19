@@ -4,23 +4,29 @@ function Card({
   id,
   title,
   author,
-  releaseDate,
   description,
-  price,
+  isPublic,
+  createdAt,
   onEdit,
   onDelete,
 }) {
   const handleEdit = () => {
     if (onEdit) {
-      onEdit({ id, title, author, releaseDate, description, price });
+      onEdit({ id, title, author, description, isPublic });
     }
   };
 
   const handleDelete = () => {
     if (onDelete) {
-      onDelete({ id });
+      onDelete(id);
     }
   };
+
+  const formattedDate = new Date(createdAt).toLocaleDateString("en-IN", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 
   return (
     <div className="h-min rounded-lg bg-background p-6 shadow-md">
@@ -35,11 +41,20 @@ function Card({
       </p>
 
       <p className="mb-1 text-sm text-gray-600">
-        <span className="font-semibold">Price:</span> ₹{price}
+        <span className="font-semibold">Visibility:</span>{" "}
+        <span
+          className={`inline-block rounded-full px-2 py-0.5 text-xs ${
+            isPublic
+              ? "bg-green-100 text-green-800"
+              : "bg-yellow-100 text-yellow-800"
+          }`}
+        >
+          {isPublic ? "Public" : "Private"}
+        </span>
       </p>
 
       <p className="mb-4 text-sm text-gray-600">
-        <span className="font-semibold">Release Date:</span> {releaseDate}
+        <span className="font-semibold">Added on:</span> {formattedDate}
       </p>
 
       <div className="flex justify-between">

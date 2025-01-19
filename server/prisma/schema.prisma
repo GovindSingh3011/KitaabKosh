@@ -24,6 +24,7 @@ model User {
   updatedAt     DateTime
   sessions      Session[]
   accounts      Account[]
+  books         Book[]
 
   @@unique([email])
   @@map("user")
@@ -75,7 +76,15 @@ model Verification {
 }
 
 model Book {
-  id     String @id @map("_id")
-  title  String
-  author String
+  id          String   @id @map("_id")
+  title       String
+  author      String
+  description String?
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  isPublic    Boolean  @default(false)
+
+  @@map("book")
 }
