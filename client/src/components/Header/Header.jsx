@@ -1,57 +1,58 @@
-import { Link, NavLink } from 'react-router-dom'
-import Logo from '../../assets/KitaabKosh_logo.svg'
+import { Link, NavLink } from "react-router-dom";
+import Logo from "/KitaabKosh_logo.svg";
 
 function Header() {
+  return (
+    <header className="sticky top-0 z-50 shadow">
+      <nav className="border-gray-200 bg-background py-2.5">
+        <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between">
+          <Link to="/" className="flex items-center">
+            <img src={Logo} className="mr-3 h-12" alt="KitaabKosh Logo" />
+          </Link>
+          <div className="items-center justify-between lg:order-1 lg:flex lg:w-auto">
+            <ul className="mt-4 flex flex-col font-medium lg:mt-0 lg:flex-row lg:space-x-8">
+              <li>
+                <NavLink
+                  to="/dashboard"
+                  className={({ isActive }) =>
+                    `block py-2 pl-3 pr-4 ${isActive ? "text-[#98793E]" : "text-[#042546]"} border-b border-gray-100 hover:bg-gray-50 hover:text-[#745c30] lg:border-0 lg:p-0 lg:hover:bg-transparent`
+                  }
+                >
+                  Home
+                </NavLink>
+              </li>
 
-    return (
-        <header className="shadow sticky z-50 top-0">
-            <nav className="bg-white border-gray-200  py-2.5">
-                <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
-                    <Link to="/" className="flex items-center">
-                        <img
-                            src={Logo}
-                            className="mr-3 h-12"
-                            alt="KitaabKosh Logo"
-                        />
-                    </Link>
-                    <div className="justify-between items-center lg:flex lg:w-auto lg:order-1"
-                    >
-                        <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
-                            <li>
-                                <NavLink to="/" className={({ isActive }) =>
-                                    `block py-2 pr-4 pl-3 ${isActive ? "text-[#98793E]" : "text-[#042546]"} border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-[#745c30] lg:p-0`
-                                }
-                                > Home </NavLink>
-                            </li>
+              <li>
+                <NavLink
+                  to="/about"
+                  className={({ isActive }) =>
+                    `block py-2 pl-3 pr-4 ${isActive ? "text-[#98793E]" : "text-[#042546]"} border-b border-gray-100 hover:bg-gray-50 hover:text-[#745c30] lg:border-0 lg:p-0 lg:hover:bg-transparent`
+                  }
+                >
+                  About
+                </NavLink>
+              </li>
+            </ul>
+          </div>
 
-                            <li>
-                                <NavLink to="/about" className={({ isActive }) =>
-                                    `block py-2 pr-4 pl-3 ${isActive ? "text-[#98793E]" : "text-[#042546]"} border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-[#745c30] lg:p-0`
-                                }
-                                > About </NavLink>
-                            </li>
-
-                        </ul>
-                    </div>
-
-                    <div className="flex items-center lg:order-2">
-                        <Link
-                            to="#"
-                            className="text-[#042546] hover:bg-gray-50 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2"
-                        >
-                            Log in
-                        </Link>
-                        <Link
-                            to="#"
-                            className="text-white bg-[#98793E] hover:bg-[#745c30] font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2"
-                        >
-                            Get started
-                        </Link>
-                    </div>
-                </div>
-            </nav>
-        </header>
-    )
+          <div className="flex items-center lg:order-2">
+            <Link
+              to="#"
+              className="mr-2 rounded-lg px-4 py-2 text-sm font-medium text-[#042546] hover:bg-gray-50 lg:px-5 lg:py-2.5"
+            >
+              Log in
+            </Link>
+            <Link
+              to="#"
+              className="text-back mr-2 rounded-lg bg-[#98793E] px-4 py-2 text-sm font-medium hover:bg-[#745c30] lg:px-5 lg:py-2.5"
+            >
+              Get started
+            </Link>
+          </div>
+        </div>
+      </nav>
+    </header>
+  );
 }
 
-export default Header
+export default Header;
