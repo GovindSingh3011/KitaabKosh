@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "./ui/button";
+import Logo from "/KitaabKosh_logo.svg";
 import { toast } from "sonner";
 import {
   Form,
@@ -68,10 +69,10 @@ export default function SignUpForm() {
   };
 
   return (
-    <div className="mx-auto mt-10 max-w-md p-6">
-      <h1 className="mb-6 text-center text-3xl font-bold">
-        Welcome to Bookmate
-      </h1>
+    <div className="mx-auto max-w-md p-6">
+      <div className="flex items-center justify-center pb-5">
+        <img src={Logo} className="mr-3 h-24" alt="KitaabKosh Logo" />
+      </div>
       <div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
