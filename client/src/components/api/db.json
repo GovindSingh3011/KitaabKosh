@@ -1,0 +1,28 @@
+{
+    "books":[
+    {
+      "id": 1,
+      "title": "Title",
+      "author": "Author Name",
+      "releaseDate": "2025-01-19",
+      "description": "This is an example description.",
+      "price": 300
+    },
+    {
+      "id": 2,
+      "title": "Title",
+      "author": "Author Name",
+      "releaseDate": "2025-01-19",
+      "description": "This is an example description.",
+      "price": 300
+    },
+    {
+      "id": 3,
+      "title": "Title",
+      "author": "Author Name",
+      "releaseDate": "2025-01-19",
+      "description": "This is an example description.",
+      "price": 300
+    }
+  ]
+}
