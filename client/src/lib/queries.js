@@ -90,3 +90,33 @@ export const getBook = async (id) => {
     throw new Error("Failed to fetch book: " + error.message);
   }
 };
+
+export const signIn = async (credentials) => {
+  try {
+    const response = await fetch(`${API_URL}/auth/signin`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(credentials),
+    });
+    return handleResponse(response);
+  } catch (error) {
+    throw new Error("Failed to sign in: " + error.message);
+  }
+};
+
+export const signUp = async (userData) => {
+  try {
+    const response = await fetch(`${API_URL}/auth/signup`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    });
+    return handleResponse(response);
+  } catch (error) {
+    throw new Error("Failed to sign up: " + error.message);
+  }
+};

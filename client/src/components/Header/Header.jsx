@@ -1,9 +1,17 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Logo from "/KitaabKosh_logo.svg";
+import { useAuth } from "../../components/auth-context";
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
     <header className="sticky top-0 z-50 shadow">
@@ -12,8 +20,6 @@ function Header() {
           <Link to="/dashboard" className="flex items-center">
             <img src={Logo} className="mr-3 h-12" alt="KitaabKosh Logo" />
           </Link>
-
-          {/* Hamburger button */}
           <button
             type="button"
             className="ml-auto inline-flex items-center rounded-lg p-2 text-sm text-[#042546] hover:bg-gray-100 focus:outline-none lg:hidden"
@@ -42,7 +48,6 @@ function Header() {
             </svg>
           </button>
 
-          {/* Links */}
           <div
             className={`${
               isMenuOpen ? "block" : "hidden"
@@ -78,20 +83,35 @@ function Header() {
             </ul>
           </div>
 
-          {/* Login and Get Started buttons */}
           <div className="hidden items-center lg:order-2 lg:flex">
-            <Link
-              to="#"
-              className="mr-2 rounded-lg px-4 py-2 text-sm font-medium text-[#042546] hover:bg-gray-50 lg:px-5 lg:py-2.5"
-            >
-              Log in
-            </Link>
-            <Link
-              to="#"
-              className="text-back mr-2 rounded-lg bg-[#98793E] px-4 py-2 text-sm font-medium hover:bg-[#745c30] lg:px-5 lg:py-2.5"
-            >
-              Get started
-            </Link>
+            {user ? (
+              <>
+                <span className="mr-4 text-[#042546]">
+                  Welcome, {user.name}
+                </span>
+                <button
+                  onClick={handleLogout}
+                  className="text-back mr-2 rounded-lg bg-[#98793E] px-4 py-2 text-sm font-medium hover:bg-[#745c30] lg:px-5 lg:py-2.5"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/"
+                  className="mr-2 rounded-lg px-4 py-2 text-sm font-medium text-[#042546] hover:bg-gray-50 lg:px-5 lg:py-2.5"
+                >
+                  Log in
+                </Link>
+                <Link
+                  to="/"
+                  className="text-back mr-2 rounded-lg bg-[#98793E] px-4 py-2 text-sm font-medium hover:bg-[#745c30] lg:px-5 lg:py-2.5"
+                >
+                  Get started
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </nav>
