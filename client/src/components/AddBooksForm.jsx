@@ -1,6 +1,9 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
+import { createBook } from "../lib/queries";
+import { toast } from "sonner";
 
-const AddBooksForm = () => {
+const AddBooksForm = ({ onBookAdded }) => {
   const initialFormData = {
     title: "",
     author: "",
@@ -20,12 +23,19 @@ const AddBooksForm = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    alert("Form Submitted!");
-    setFormData(initialFormData); // Clear the form data
-    setIsOpen(false);
+    try {
+      const newBook = await createBook(formData);
+      toast.success("Book added successfully!");
+      setFormData(initialFormData);
+      setIsOpen(false);
+      if (onBookAdded) {
+        onBookAdded(newBook); // Callback to update parent component
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   const handleClose = () => {
@@ -100,7 +110,7 @@ const AddBooksForm = () => {
                   name="publishDate"
                   value={formData.publishDate}
                   onChange={handleInputChange}
-                  className="w-full rounded border p-2 text-transform: uppercase"
+                  className="text-transform: w-full rounded border p-2 uppercase"
                   required
                 />
               </div>

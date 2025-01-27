@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Footer from "../components/Footer/Footer";
 import Header from "../components/Header/Header";
 import Card from "../components/Card/Card";
+import AddBooksForm from "../components/AddBooksForm";
 import { getMyBooks, deleteBook, updateBook } from "../lib/queries";
 import { toast } from "sonner";
 
@@ -22,6 +23,10 @@ export default function Dashboard() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleBookAdded = (newBook) => {
+    setCards((prevCards) => [...prevCards, newBook]);
   };
 
   const handleEdit = async (card) => {
@@ -65,22 +70,27 @@ export default function Dashboard() {
   return (
     <div className="grid min-h-svh grid-rows-[auto_1fr_auto]">
       <Header />
-      {cards.length === 0 ? (
-        <div className="flex items-center justify-center">
-          <p className="text-gray-500">No books found. Add some books!</p>
+      <div className="p-4">
+        <div className="mb-4 flex justify-end">
+          <AddBooksForm onBookAdded={handleBookAdded} />
         </div>
-      ) : (
-        <div className="flex flex-wrap justify-center gap-5 p-4">
-          {cards.map((card) => (
-            <Card
-              key={card.id}
-              {...card}
-              onEdit={() => handleEdit(card)}
-              onDelete={() => handleDelete(card.id)}
-            />
-          ))}
-        </div>
-      )}
+        {cards.length === 0 ? (
+          <div className="flex items-center justify-center">
+            <p className="text-gray-500">No books found. Add some books!</p>
+          </div>
+        ) : (
+          <div className="flex flex-wrap justify-center gap-5">
+            {cards.map((card) => (
+              <Card
+                key={card.id}
+                {...card}
+                onEdit={() => handleEdit(card)}
+                onDelete={() => handleDelete(card.id)}
+              />
+            ))}
+          </div>
+        )}
+      </div>
       <Footer />
     </div>
   );
