@@ -26,7 +26,6 @@ export default function Dashboard() {
 
   const handleEdit = async (card) => {
     try {
-      // You might want to open a modal or form here
       const updatedData = {
         title: card.title,
         author: card.author,

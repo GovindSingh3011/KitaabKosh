@@ -1,5 +1,5 @@
 import Header from "../components/Header/Header";
-import Logo from "../assets/Kitaabkosh_logo.svg";
+import Logo from "../assets/KitaabKosh_logo.svg";
 import Footer from "../components/Footer/Footer";
 import Govind from "/Govind.jpg";
 
@@ -23,7 +23,7 @@ export default function About() {
               <div className="md:ml-2 lg:ml-5">
                 <span className="text-gray-500">Our Story</span>
                 <h2 className="pb-6 text-4xl font-bold">About KitaabKosh</h2>
-                <p className="text-lg leading-relaxed pb-4">
+                <p className="pb-4 text-lg leading-relaxed">
                   KitaabKosh is a simple and easy-to-use book management website
                   created by a group of four students. It helps users organize,
                   track, and manage books, whether they are part of a library or

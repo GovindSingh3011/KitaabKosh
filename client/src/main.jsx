@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router";
 import Home from "./routes/home.jsx";
 import Dashboard from "./routes/dashboard.jsx";
 import { Toaster } from "./components/ui/sonner";
-import About from "./routes/About";
+import About from "./routes/about";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
