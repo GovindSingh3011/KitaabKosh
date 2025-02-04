@@ -1,6 +1,9 @@
 import express from "express";
 import prisma from "../../prisma/index.js";
 import { authenticate } from "../middleware/auth.js";
+import { upload } from "../middleware/multer.js";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
 const router = express.Router();
 
@@ -62,33 +65,65 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/", authenticate, async (req, res) => {
-  try {
-    const { title, author, description, isPublic } = req.body;
-
-    if (!title || !author) {
-      return res.status(400).json({ error: "Title and author are required" });
-    }
-
-    const book = await prisma.book.create({
-      data: {
-        id: Math.random().toString(36).substr(2, 9),
-        title,
-        author,
-        description,
-        isPublic: isPublic ?? false,
-        userId: req.user.id,
-      },
+router.post(
+  "/",
+  authenticate,
+  (req, res, next) => {
+    upload.single("file")(req, res, (err) => {
+      if (err) {
+        return res.status(400).json({
+          success: false,
+          error: err.message,
+        });
+      }
+      next();
     });
+  },
+  asyncHandler(async (req, res) => {
+    try {
+      const { title, author, description, isPublic } = req.body;
 
-    res.status(201).json(book);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to create book" });
-  }
-});
+      if (!title || !author) {
+        return res.status(400).json({ error: "Title and author are required" });
+      }
 
-router.put("/:id", authenticate, async (req, res) => {
-  try {
+      let fileUrl = null;
+      let fileName = null;
+
+      if (req.file) {
+        const cloudinaryResponse = await uploadOnCloudinary(req.file.path);
+        if (cloudinaryResponse) {
+          fileUrl = cloudinaryResponse.secure_url;
+          fileName = req.file.originalname;
+        }
+      }
+
+      const book = await prisma.book.create({
+        data: {
+          id: Math.random().toString(36).substr(2, 9),
+          title,
+          author,
+          description,
+          isPublic: isPublic === "true",
+          userId: req.user.id,
+          fileUrl,
+          fileName,
+        },
+      });
+
+      res.status(201).json(book);
+    } catch (error) {
+      console.error("Error creating book:", error);
+      res.status(500).json({ error: "Failed to create book" });
+    }
+  }),
+);
+
+router.put(
+  "/:id",
+  authenticate,
+  upload.single("file"),
+  asyncHandler(async (req, res) => {
     const book = await prisma.book.findUnique({
       where: { id: req.params.id },
     });
@@ -103,16 +138,29 @@ router.put("/:id", authenticate, async (req, res) => {
         .json({ error: "Not authorized to update this book" });
     }
 
+    let fileUrl = book.fileUrl;
+    let fileName = book.fileName;
+
+    if (req.file) {
+      const cloudinaryResponse = await uploadOnCloudinary(req.file.path);
+      if (cloudinaryResponse) {
+        fileUrl = cloudinaryResponse.secure_url;
+        fileName = req.file.originalname;
+      }
+    }
+
     const updatedBook = await prisma.book.update({
       where: { id: req.params.id },
-      data: req.body,
+      data: {
+        ...req.body,
+        fileUrl,
+        fileName,
+      },
     });
 
     res.json(updatedBook);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to update book" });
-  }
-});
+  }),
+);
 
 router.delete("/:id", authenticate, async (req, res) => {
   try {

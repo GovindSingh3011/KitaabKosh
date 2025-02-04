@@ -7,6 +7,8 @@ function Card({
   description,
   isPublic,
   createdAt,
+  fileUrl,
+  fileName,
   onEdit,
   onDelete,
 }) {
@@ -22,6 +24,12 @@ function Card({
     }
   };
 
+  const handleDownload = () => {
+    if (fileUrl) {
+      window.open(fileUrl, "_blank");
+    }
+  };
+
   const formattedDate = new Date(createdAt).toLocaleDateString("en-IN", {
     year: "numeric",
     month: "long",
@@ -29,7 +37,7 @@ function Card({
   });
 
   return (
-    <div className="h-min rounded-lg bg-background p-6 shadow-md">
+    <div className="h-min w-72 rounded-lg bg-background p-6 shadow-md">
       <h2 className="mb-2 text-xl font-bold text-gray-800">{title}</h2>
 
       <p className="mb-1 text-sm text-gray-600">
@@ -37,8 +45,16 @@ function Card({
       </p>
 
       <p className="mb-1 text-sm text-gray-600">
-        <span className="font-semibold">Description:</span> {description}
+        <span className="font-semibold">Description:</span>{" "}
+        <span className="line-clamp-2">{description}</span>
       </p>
+
+      {fileName && (
+        <p className="mb-1 text-sm text-gray-600">
+          <span className="font-semibold">File:</span>{" "}
+          <span className="line-clamp-1">{fileName}</span>
+        </p>
+      )}
 
       <p className="mb-1 text-sm text-gray-600">
         <span className="font-semibold">Visibility:</span>{" "}
@@ -57,19 +73,29 @@ function Card({
         <span className="font-semibold">Added on:</span> {formattedDate}
       </p>
 
-      <div className="flex justify-between">
-        <button
-          className="rounded bg-[#98793E] px-4 py-1 text-background transition duration-300 hover:bg-[#745c30]"
-          onClick={handleEdit}
-        >
-          Edit
-        </button>
-        <button
-          className="rounded bg-red-500 px-4 py-1 text-background transition duration-300 hover:bg-red-600"
-          onClick={handleDelete}
-        >
-          Delete
-        </button>
+      <div className="flex flex-col gap-2">
+        {fileUrl && (
+          <button
+            className="w-full rounded bg-green-500 px-4 py-1 text-background transition duration-300 hover:bg-green-600"
+            onClick={handleDownload}
+          >
+            Download
+          </button>
+        )}
+        <div className="flex justify-between gap-2">
+          <button
+            className="flex-1 rounded bg-[#98793E] px-4 py-1 text-background transition duration-300 hover:bg-[#745c30]"
+            onClick={handleEdit}
+          >
+            Edit
+          </button>
+          <button
+            className="flex-1 rounded bg-red-500 px-4 py-1 text-background transition duration-300 hover:bg-red-600"
+            onClick={handleDelete}
+          >
+            Delete
+          </button>
+        </div>
       </div>
     </div>
   );

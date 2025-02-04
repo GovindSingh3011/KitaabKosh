@@ -10,28 +10,51 @@ const AddBooksForm = ({ onBookAdded }) => {
     description: "",
     publishDate: "",
     isPublic: false,
+    file: null,
   };
 
   const [formData, setFormData] = useState(initialFormData);
   const [isOpen, setIsOpen] = useState(false);
+  const [fileName, setFileName] = useState("");
 
   const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value,
-    });
+    const { name, value, type, checked, files } = e.target;
+    if (type === "file") {
+      setFormData({
+        ...formData,
+        file: files[0],
+      });
+      setFileName(files[0]?.name || "");
+    } else {
+      setFormData({
+        ...formData,
+        [name]: type === "checkbox" ? checked : value,
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const newBook = await createBook(formData);
+      const formDataToSend = new FormData();
+
+      formDataToSend.append("title", formData.title);
+      formDataToSend.append("author", formData.author);
+      formDataToSend.append("description", formData.description);
+      formDataToSend.append("publishDate", formData.publishDate);
+      formDataToSend.append("isPublic", formData.isPublic);
+
+      if (formData.file) {
+        formDataToSend.append("file", formData.file);
+      }
+
+      const newBook = await createBook(formDataToSend);
       toast.success("Book added successfully!");
       setFormData(initialFormData);
+      setFileName("");
       setIsOpen(false);
       if (onBookAdded) {
-        onBookAdded(newBook); // Callback to update parent component
+        onBookAdded(newBook);
       }
     } catch (error) {
       toast.error(error.message);
@@ -40,6 +63,7 @@ const AddBooksForm = ({ onBookAdded }) => {
 
   const handleClose = () => {
     setFormData(initialFormData);
+    setFileName("");
     setIsOpen(false);
   };
 
@@ -99,6 +123,28 @@ const AddBooksForm = ({ onBookAdded }) => {
                   placeholder="Enter description"
                   rows="3"
                 ></textarea>
+              </div>
+
+              <div>
+                <label className="mb-1 block font-medium text-gray-700">
+                  Upload Book File (PDF/EPUB)
+                </label>
+                <div className="flex items-center space-x-2">
+                  <label className="cursor-pointer rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+                    Choose File
+                    <input
+                      type="file"
+                      name="file"
+                      onChange={handleInputChange}
+                      accept=".pdf,.epub"
+                      className="hidden"
+                      required
+                    />
+                  </label>
+                  <span className="text-sm text-gray-600">
+                    {fileName || "No file chosen"}
+                  </span>
+                </div>
               </div>
 
               <div>

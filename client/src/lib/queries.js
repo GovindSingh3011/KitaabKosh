@@ -1,11 +1,15 @@
 const API_URL = "http://localhost:3000/api";
 
-const getHeaders = () => {
+const getHeaders = (isMultipart = false) => {
   const token = localStorage.getItem("token");
-  return {
-    "Content-Type": "application/json",
-    Authorization: token ? `Bearer ${token}` : "",
-  };
+  return isMultipart
+    ? {
+        Authorization: token ? `Bearer ${token}` : "",
+      }
+    : {
+        "Content-Type": "application/json",
+        Authorization: token ? `Bearer ${token}` : "",
+      };
 };
 
 const handleResponse = async (response) => {
@@ -40,12 +44,16 @@ export const getMyBooks = async () => {
   }
 };
 
-export const createBook = async (bookData) => {
+export const createBook = async (formData) => {
   try {
+    const isFormData = formData instanceof FormData;
+
+    const body = isFormData ? formData : JSON.stringify(formData);
+
     const response = await fetch(`${API_URL}/books`, {
       method: "POST",
-      headers: getHeaders(),
-      body: JSON.stringify(bookData),
+      headers: getHeaders(isFormData),
+      body: body,
     });
     return handleResponse(response);
   } catch (error) {
@@ -53,12 +61,16 @@ export const createBook = async (bookData) => {
   }
 };
 
-export const updateBook = async (id, bookData) => {
+export const updateBook = async (id, formData) => {
   try {
+    const isFormData = formData instanceof FormData;
+
+    const body = isFormData ? formData : JSON.stringify(formData);
+
     const response = await fetch(`${API_URL}/books/${id}`, {
       method: "PUT",
-      headers: getHeaders(),
-      body: JSON.stringify(bookData),
+      headers: getHeaders(isFormData),
+      body: body,
     });
     return handleResponse(response);
   } catch (error) {

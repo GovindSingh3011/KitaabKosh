@@ -31,14 +31,17 @@ export default function Dashboard() {
 
   const handleEdit = async (card) => {
     try {
-      const updatedData = {
-        title: card.title,
-        author: card.author,
-        description: card.description,
-        isPublic: card.isPublic,
-      };
+      const formData = new FormData();
+      formData.append("title", card.title);
+      formData.append("author", card.author);
+      formData.append("description", card.description);
+      formData.append("isPublic", card.isPublic);
 
-      const updatedBook = await updateBook(card.id, updatedData);
+      if (card.file) {
+        formData.append("file", card.file);
+      }
+
+      const updatedBook = await updateBook(card.id, formData);
 
       setCards((prevCards) =>
         prevCards.map((prevCard) =>
