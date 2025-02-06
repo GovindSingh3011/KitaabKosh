@@ -189,3 +189,245 @@ router.delete("/:id", authenticate, async (req, res) => {
 });
 
 export default router;
+
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     Book:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           example: "abc123"
+ *         title:
+ *           type: string
+ *           example: "The Great Gatsby"
+ *         author:
+ *           type: string
+ *           example: "F. Scott Fitzgerald"
+ *         description:
+ *           type: string
+ *           example: "A story of the fabulously wealthy Jay Gatsby"
+ *         userId:
+ *           type: string
+ *           example: "user123"
+ *         fileUrl:
+ *           type: string
+ *           example: "https://cloudinary.com/..."
+ *         fileName:
+ *           type: string
+ *           example: "great-gatsby.pdf"
+ *         isPublic:
+ *           type: boolean
+ *           example: true
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *         user:
+ *           type: object
+ *           properties:
+ *             name:
+ *               type: string
+ *               example: "John Doe"
+ *             email:
+ *               type: string
+ *               example: "john@example.com"
+ *   securitySchemes:
+ *     BearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *
+ * /api/books/public:
+ *   get:
+ *     tags:
+ *       - Books
+ *     summary: Get all public books
+ *     description: Retrieve a list of all public books
+ *     responses:
+ *       200:
+ *         description: List of public books
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Book'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Failed to fetch public books"
+ *
+ * /api/books/my-books:
+ *   get:
+ *     tags:
+ *       - Books
+ *     summary: Get user's books
+ *     description: Retrieve all books belonging to the authenticated user
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of user's books
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Book'
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ *
+ * /api/books:
+ *   post:
+ *     tags:
+ *       - Books
+ *     summary: Create a new book
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *               - author
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: "The Great Gatsby"
+ *               author:
+ *                 type: string
+ *                 example: "F. Scott Fitzgerald"
+ *               description:
+ *                 type: string
+ *                 example: "A story of the fabulously wealthy Jay Gatsby"
+ *               isPublic:
+ *                 type: boolean
+ *                 example: true
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       201:
+ *         description: Book created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Book'
+ *       400:
+ *         description: Invalid input
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ *
+ * /api/books/{id}:
+ *   get:
+ *     tags:
+ *       - Books
+ *     summary: Get a book by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         example: "book123"
+ *         description: The book ID
+ *     responses:
+ *       200:
+ *         description: Book details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Book'
+ *       404:
+ *         description: Book not found
+ *       403:
+ *         description: Access denied
+ *   put:
+ *     tags:
+ *       - Books
+ *     summary: Update a book
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         example: "book123"
+ *         description: The book ID
+ *     requestBody:
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: "Updated Title"
+ *               author:
+ *                 type: string
+ *                 example: "Updated Author"
+ *               description:
+ *                 type: string
+ *                 example: "Updated description"
+ *               isPublic:
+ *                 type: boolean
+ *                 example: true
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: Book updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Book'
+ *       403:
+ *         description: Not authorized
+ *       404:
+ *         description: Book not found
+ *       500:
+ *         description: Server error
+ *   delete:
+ *     tags:
+ *       - Books
+ *     summary: Delete a book
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         example: "book123"
+ *         description: The book ID
+ *     responses:
+ *       204:
+ *         description: Book deleted successfully
+ *       403:
+ *         description: Not authorized
+ *       404:
+ *         description: Book not found
+ *       500:
+ *         description: Server error
+ */
