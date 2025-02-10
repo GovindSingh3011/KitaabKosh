@@ -5,6 +5,7 @@ import Card from "../components/Card/Card";
 import AddBooksForm from "../components/AddBooksForm";
 import { getMyBooks, deleteBook, updateBook } from "../lib/queries";
 import { toast } from "sonner";
+import Loader from "../components/ui/Loader";
 
 export default function Dashboard() {
   const [cards, setCards] = useState([]);
@@ -69,7 +70,11 @@ export default function Dashboard() {
   };
 
   if (isLoading) {
-    return <div>loading</div>;
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Loader />
+      </div>
+    );
   }
 
   const toggleView = () => {
