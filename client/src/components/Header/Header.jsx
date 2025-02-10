@@ -54,7 +54,7 @@ function Header() {
             } w-full items-center justify-between lg:order-1 lg:flex lg:w-auto`}
             id="navbar"
           >
-            <ul className="mt-4 flex flex-col font-medium lg:mt-0 lg:flex-row lg:space-x-8">
+            <ul className="mt-4 flex flex-col items-center font-medium lg:mt-0 lg:flex-row lg:space-x-8">
               <li>
                 <NavLink
                   to="/dashboard"
@@ -80,38 +80,35 @@ function Header() {
                   About
                 </NavLink>
               </li>
+              {user ? (
+                <>
+                  <li>
+                    <span className="text-[#042546]">
+                      Welcome, {user.name}
+                    </span>
+                  </li>
+                  <li>
+                    <button
+                      onClick={handleLogout}
+                      className="text-back mr-2 rounded-lg bg-[#98793E] px-4 py-2 text-sm font-medium hover:bg-[#745c30] lg:px-5 lg:py-2.5"
+                    >
+                      Logout
+                    </button>
+                  </li>
+                </>
+              ) : (
+                <div className="py-3">
+                  <li>
+                    <Link
+                      to="/"
+                      className="text-back mr-2 rounded-lg bg-[#98793E] px-4 py-2 text-sm font-medium hover:bg-[#745c30] lg:px-5 lg:py-2.5"
+                    >
+                      Log in
+                    </Link>
+                  </li>
+                </div>
+              )}
             </ul>
-          </div>
-
-          <div className="hidden items-center lg:order-2 lg:flex">
-            {user ? (
-              <>
-                <span className="mr-4 text-[#042546]">
-                  Welcome, {user.name}
-                </span>
-                <button
-                  onClick={handleLogout}
-                  className="text-back mr-2 rounded-lg bg-[#98793E] px-4 py-2 text-sm font-medium hover:bg-[#745c30] lg:px-5 lg:py-2.5"
-                >
-                  Logout
-                </button>
-              </>
-            ) : (
-              <>
-                <Link
-                  to="/"
-                  className="mr-2 rounded-lg px-4 py-2 text-sm font-medium text-[#042546] hover:bg-gray-50 lg:px-5 lg:py-2.5"
-                >
-                  Log in
-                </Link>
-                <Link
-                  to="/"
-                  className="text-back mr-2 rounded-lg bg-[#98793E] px-4 py-2 text-sm font-medium hover:bg-[#745c30] lg:px-5 lg:py-2.5"
-                >
-                  Get started
-                </Link>
-              </>
-            )}
           </div>
         </div>
       </nav>

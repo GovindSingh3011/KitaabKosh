@@ -82,7 +82,7 @@ const AddBooksForm = ({ onBookAdded }) => {
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="fixed z-50 inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="w-96 rounded-lg bg-white p-6 shadow-lg">
             <h2 className="mb-4 text-2xl font-bold">Add Book Details</h2>
             {isLoading ? (
