@@ -9,6 +9,8 @@ import { toast } from "sonner";
 export default function Dashboard() {
   const [cards, setCards] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [view, setView] = useState("all");
+  const [isGridView, setIsGridView] = useState("grid");
 
   useEffect(() => {
     fetchBooks();
@@ -70,29 +72,99 @@ export default function Dashboard() {
     return <div>loading</div>;
   }
 
+  const toggleView = () => {
+    setIsGridView((prev) => (prev === "grid" ? "list" : "grid"));
+  };
+
   return (
     <div className="grid min-h-svh grid-rows-[auto_1fr_auto]">
       <Header />
-      <div className="p-4">
-        <div className="mb-4 flex justify-end">
-          <AddBooksForm onBookAdded={handleBookAdded} />
+
+      <div className="mx-56 my-10">
+        <div className="my-4 flex items-center justify-between">
+          <div>
+            <button
+              className={`mx-2 rounded px-4 py-2 ${view === "all" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+              onClick={() => setView("all")}
+            >
+              All Books
+            </button>
+            <button
+              className={`mx-2 rounded px-4 py-2 ${view === "my" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+              onClick={() => setView("my")}
+            >
+              My Books
+            </button>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <AddBooksForm onBookAdded={handleBookAdded} />
+            <button
+              onClick={toggleView}
+              className="mx-2 rounded bg-gray-200 px-4 py-2 text-black"
+            >
+              Switch to {isGridView === "grid" ? "List View" : "Grid View"}
+            </button>
+          </div>
         </div>
-        {cards.length === 0 ? (
-          <div className="flex items-center justify-center">
-            <p className="text-gray-500">No books found. Add some books!</p>
-          </div>
-        ) : (
-          <div className="flex flex-wrap justify-center gap-5">
-            {cards.map((card) => (
-              <Card
-                key={card.id}
-                {...card}
-                onEdit={() => handleEdit(card)}
-                onDelete={() => handleDelete(card.id)}
-              />
-            ))}
-          </div>
-        )}
+
+        <div className="flex flex-wrap justify-center gap-5">
+          {cards.length === 0 ? (
+            <div className="flex items-center justify-center">
+              <p className="text-gray-500">No books found. Add some books!</p>
+            </div>
+          ) : (
+            <div className="flex flex-wrap justify-center gap-5">
+              {isGridView === "grid" ? (
+                cards.map((card) => (
+                  <Card
+                    key={card.id}
+                    {...card}
+                    onEdit={() => handleEdit(card)}
+                    onDelete={() => handleDelete(card.id)}
+                    view="grid"
+                  />
+                ))
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-base text-gray-800 dark:text-gray-400">
+                    <thead className="bg-gray-100 uppercase text-black dark:bg-gray-700 dark:text-gray-300">
+                      <tr>
+                        <th scope="col" className="px-6 py-3">
+                          Name
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                          Author
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                          Description
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                          Visibility
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                          Release Date
+                        </th>
+                        <th scope="col" className="px-6 py-3"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {cards.map((card) => (
+                        <Card
+                          key={card.id}
+                          {...card}
+                          onEdit={() => handleEdit(card)}
+                          onDelete={() => handleDelete(card.id)}
+                          view="list"
+                        />
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
       <Footer />
     </div>

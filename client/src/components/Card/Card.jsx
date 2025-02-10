@@ -11,6 +11,7 @@ function Card({
   fileName,
   onEdit,
   onDelete,
+  view,
 }) {
   const handleEdit = () => {
     if (onEdit) {
@@ -36,12 +37,51 @@ function Card({
     day: "numeric",
   });
 
+  if (view === "list") {
+    return (
+      <tr>
+        <td className="px-6 py-2">{title}</td>
+        <td className="px-6 py-2">{author}</td>
+        <td className="px-6 py-2">{description}</td>
+        <td className="px-6 py-2">{isPublic ? "Public" : "Private"}</td>
+        <td className="px-6 py-2">{formattedDate}</td>
+        <td className="px-6 py-2">
+          {fileUrl && (
+            <button
+              className="w-full rounded bg-green-500 px-4 py-1 text-background transition duration-300 hover:bg-green-600"
+              onClick={handleDownload}
+            >
+              Download
+            </button>
+          )}
+          <button
+            onClick={handleEdit}
+            className="mb-2 mr-2 rounded bg-[#98793E] px-3 py-1 text-background transition duration-300 hover:bg-[#745c30]"
+          >
+            Edit
+          </button>
+
+          <button
+            onClick={handleDelete}
+            className="rounded bg-red-500 px-3 py-1 text-background transition duration-300 hover:bg-red-600"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    );
+  }
+
   return (
     <div className="h-min w-72 rounded-lg bg-background p-6 shadow-md">
       <h2 className="mb-2 text-xl font-bold text-gray-800">{title}</h2>
 
       <p className="mb-1 text-sm text-gray-600">
         <span className="font-semibold">Author:</span> {author}
+      </p>
+
+      <p className="mb-1 text-sm text-gray-600">
+        <span className="font-semibold">Author:</span> {}
       </p>
 
       <p className="mb-1 text-sm text-gray-600">
@@ -74,6 +114,7 @@ function Card({
       </p>
 
       <div className="flex flex-col gap-2">
+        <div className="flex justify-between gap-2">
         {fileUrl && (
           <button
             className="w-full rounded bg-green-500 px-4 py-1 text-background transition duration-300 hover:bg-green-600"
@@ -82,7 +123,6 @@ function Card({
             Download
           </button>
         )}
-        <div className="flex justify-between gap-2">
           <button
             className="flex-1 rounded bg-[#98793E] px-4 py-1 text-background transition duration-300 hover:bg-[#745c30]"
             onClick={handleEdit}
