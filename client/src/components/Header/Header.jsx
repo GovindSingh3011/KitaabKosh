@@ -80,6 +80,18 @@ function Header() {
                   About
                 </NavLink>
               </li>
+              <li>
+                <NavLink
+                  to="/contact" 
+                  className={({ isActive }) =>
+                    `block py-2 pl-3 pr-4 ${
+                      isActive ? "text-[#98793E]" : "text-[#042546]"
+                    } border-b border-gray-100 hover:bg-gray-50 hover:text-[#745c30] lg:border-0 lg:p-0 lg:hover:bg-transparent`
+                  }
+                >
+                  Contact Us
+                </NavLink>
+              </li>
               {user ? (
                 <>
                   <li>
