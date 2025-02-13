@@ -2,6 +2,7 @@ import Header from "../components/Header/Header";
 import Logo from "../assets/KitaabKosh_logo.svg";
 import Footer from "../components/Footer/Footer";
 import Govind from "/Govind.jpg";
+import Tarun from "/Tarun.jpg";
 
 export default function About() {
   return (
@@ -103,7 +104,7 @@ export default function About() {
 
                 <div className="transform rounded-xl bg-white p-6 text-center shadow-lg transition-all hover:scale-105 hover:shadow-2xl">
                   <img
-                    src="path_to_image" // Replace with actual image path
+                    src={Tarun} // Replace with actual image path
                     alt="Team Member 3"
                     className="mx-auto mb-4 h-40 w-40 rounded-full border-4 border-gray-200"
                   />
